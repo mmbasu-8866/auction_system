@@ -1,0 +1,59 @@
+nohup: ignoring input
+Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+Starting Advanced Auction Server...
+Server accessible at http://0.0.0.0:5000
+ * Serving Flask app 'web_server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.89.105.243:5000
+Press CTRL+C to quit
+127.0.0.1 - - [30/Mar/2026 23:08:43] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvEZ HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:43] "POST /socket.io/?EIO=4&transport=polling&t=Pq_qvEh&sid=ik5q-r5TYYijsVdQAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:43] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvEi&sid=ik5q-r5TYYijsVdQAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:43] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvEv&sid=ik5q-r5TYYijsVdQAAAA HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:44] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvQj HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:44] "POST /socket.io/?EIO=4&transport=polling&t=Pq_qvQs&sid=Sg0BtOS5Y69GzaYnAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:44] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvQt&sid=Sg0BtOS5Y69GzaYnAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:44] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvQ-&sid=Sg0BtOS5Y69GzaYnAAAC HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:45] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvap HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:45] "POST /socket.io/?EIO=4&transport=polling&t=Pq_qvaw&sid=2YHF0bU_fzsCzsyZAAAE HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:45] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvax&sid=2YHF0bU_fzsCzsyZAAAE HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:45] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvgK HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:45] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvgK HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:45] "POST /socket.io/?EIO=4&transport=polling&t=Pq_qvgR&sid=OiJa4PEu-hJxYOFgAAAG HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:45] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvgT&sid=OiJa4PEu-hJxYOFgAAAG HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:45] "POST /socket.io/?EIO=4&transport=polling&t=Pq_qvgZ&sid=4AAveHafIIV1pbs9AAAH HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:45] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvga&sid=4AAveHafIIV1pbs9AAAH HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:45] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvgp&sid=4AAveHafIIV1pbs9AAAH HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:08:45] "GET /socket.io/?EIO=4&transport=polling&t=Pq_qvgl&sid=OiJa4PEu-hJxYOFgAAAG HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:04] "GET /socket.io/?transport=polling&EIO=4&t=1774892344.4092443 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:04] "POST /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:04] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892344.412259 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:04] "POST /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:04] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892344.4150925 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:04] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892344.4220238 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:05] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892344.4245112 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:06] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892345.4214027 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:07] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892346.4213965 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:08] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892347.4224527 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:09] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892348.421774 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:10] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892349.4228587 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:11] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892350.423001 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:12] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892351.4234812 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:13] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892352.423975 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:14] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892353.4252436 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:15] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892354.4249284 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:16] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892355.4255524 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:17] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892356.425397 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:18] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892357.425345 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:19] "POST /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:19] "GET /socket.io/?transport=polling&EIO=4&sid=t-5PxaywSAl0CP_BAAAK&t=1774892358.4267426 HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:46] "GET /socket.io/?EIO=4&transport=websocket&sid=2YHF0bU_fzsCzsyZAAAE HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:46] "GET /static/script.js HTTP/1.1" 304 -
+127.0.0.1 - - [30/Mar/2026 23:09:46] "GET /static/style.css HTTP/1.1" 304 -
+127.0.0.1 - - [30/Mar/2026 23:09:46] "GET /socket.io/?EIO=4&transport=polling&t=Pq_r8fY HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:46] "POST /socket.io/?EIO=4&transport=polling&t=Pq_r8fg&sid=wxKSUWb8s8MQD9zIAAAM HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 23:09:46] "GET /socket.io/?EIO=4&transport=polling&t=Pq_r8fg.0&sid=wxKSUWb8s8MQD9zIAAAM HTTP/1.1" 200 -

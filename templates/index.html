@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Auction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🎯 Advanced Auction System</h1>
+            <div class="status-bar">
+                <span id="connection-status" class="status disconnected">Disconnected</span>
+                <span id="user-info" class="user-info">Not logged in</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Login Panel -->
+            <div id="login-panel" class="panel active">
+                <h2>Join the Auction</h2>
+                <div class="form-group">
+                    <input 
+                        type="text" 
+                        id="username-input" 
+                        placeholder="Enter your username" 
+                        maxlength="20"
+                        autocomplete="off"
+                    >
+                    <button id="login-btn" class="btn btn-primary">Join Auction</button>
+                </div>
+                <p class="info-text">Enter a unique username to participate in the auction.</p>
+            </div>
+
+            <!-- Auction Panel -->
+            <div id="auction-panel" class="panel">
+                <div class="auction-grid">
+                    <!-- Current Item -->
+                    <div class="section current-item">
+                        <h3>Current Item</h3>
+                        <div id="item-display" class="item-box">
+                            <p class="item-name">Waiting for auction to start...</p>
+                            <p class="item-price">$0</p>
+                        </div>
+                    </div>
+
+                    <!-- Bidding Area -->
+                    <div class="section bidding-area">
+                        <h3>Place Your Bid</h3>
+                        <div class="bid-form">
+                            <input 
+                                type="number" 
+                                id="bid-input" 
+                                placeholder="Bid amount" 
+                                min="1" 
+                                step="1"
+                            >
+                            <button id="bid-btn" class="btn btn-success">Place Bid</button>
+                        </div>
+                        <div class="auction-info">
+                            <p>Current Price: <span id="current-price">$0</span></p>
+                            <p>Highest Bidder: <span id="highest-bidder">None</span></p>
+                            <p>Time Remaining: <span id="time-remaining">20s</span></p>
+                            <p>Active Bidders: <span id="active-bidders">0</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Balance & Account -->
+                    <div class="section account">
+                        <h3>Your Account</h3>
+                        <div class="balance-box">
+                            <p>Current Balance:</p>
+                            <p class="balance-amount" id="balance">$1000</p>
+                        </div>
+                        <button id="logout-btn" class="btn btn-secondary">Leave Auction</button>
+                    </div>
+                </div>
+
+                <!-- Live Feed -->
+                <div class="section live-feed">
+                    <h3>Live Feed</h3>
+                    <div id="messages" class="messages-container">
+                        <p class="system-message">Waiting for auction to start...</p>
+                    </div>
+                </div>
+
+                <!-- Auction History -->
+                <div class="section history">
+                    <h3>Auction History</h3>
+                    <div id="history" class="history-container">
+                        <p class="empty-message">No history yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Advanced Auction System | Real-time Bidding Platform</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

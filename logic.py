@@ -9,11 +9,11 @@ class AuctionManager:
         self.lock = threading.Lock()
 
         self.items = [
-            {"name": "Item 1", "base_price": 200},
-            {"name": "Item 2", "base_price": 200},
-            {"name": "Item 3", "base_price": 200},
-            {"name": "Item 4", "base_price": 200},
-            {"name": "Item 5", "base_price": 200}
+            {"name": "Vintage Watch", "base_price": 200},
+            {"name": "Gold Necklace", "base_price": 200},
+            {"name": "Antique Vase", "base_price": 200},
+            {"name": "Diamond Ring", "base_price": 200},
+            {"name": "Rare Painting", "base_price": 200}
         ]
 
         self.current_index = 0
@@ -47,12 +47,12 @@ Welcome {user}!
 
 Auction Rules:
 
-1) Initial Balance: 1000
-2) Base price: 200
-3) Bid must be multiple of 10
+1) Initial Balance: $1000
+2) Base price: $200
+3) Higher bids only
 4) Timer resets to 20 sec on every bid
 5) If no bid in 20 sec → item sold
-6) Command format: bid 210
+6) All balances are virtual currency
 """
 
     # -------------------------
@@ -63,8 +63,8 @@ Auction Rules:
 
         return (
             f"\nCURRENT ITEM: {item['name']}\n"
-            f"Base price: 200\n"
-            f"Current price: {self.current_price}\n"
+            f"Base price: ${item['base_price']}\n"
+            f"Current price: ${self.current_price}\n"
             f"Highest bidder: {self.highest_bidder}"
         )
 
@@ -76,25 +76,41 @@ Auction Rules:
 
             if not self.auction_running:
 
-                return "Auction not started yet"
+                return {
+                    "success": False,
+                    "message": "Auction not started yet"
+                }
 
-            if price % 10 != 0:
+            if not isinstance(price, int) or price < 1:
 
-                return "Bid must be multiple of 10"
+                return {
+                    "success": False,
+                    "message": "Bid must be a positive integer"
+                }
 
             if price <= self.current_price:
 
-                return (
-                    f"Bid must be higher than "
-                    f"{self.current_price}"
-                )
+                return {
+                    "success": False,
+                    "message": f"Bid must be higher than ${self.current_price}"
+                }
+
+            if user not in self.balances:
+
+                return {
+                    "success": False,
+                    "message": "User not registered"
+                }
 
             if self.balances[user] < price:
 
-                return "Insufficient balance"
+                return {
+                    "success": False,
+                    "message": f"Insufficient balance. You have ${self.balances[user]}"
+                }
 
             # refund previous bidder
-            if self.highest_bidder:
+            if self.highest_bidder and self.highest_bidder != user:
 
                 prev = self.highest_bidder
                 self.balances[prev] += self.current_price
@@ -110,22 +126,22 @@ Auction Rules:
 
             timestamp = time.strftime("%H:%M:%S")
 
-            message = (
-                "\nNEW BID RECEIVED\n\n"
-                f"Bidder: {user}\n"
-                f"Bid Amount: {price}\n"
-                f"Remaining Balance: {self.balances[user]}\n\n"
-                f"Current Highest Bidder: {self.highest_bidder}\n"
-                f"Current Price: {self.current_price}\n"
-            )
+            message = f"Bid placed by {user} for ${price}"
 
-            self.history.append(
-                f"[{timestamp}] {user} bid {price}"
-            )
+            self.history.append({
+                "timestamp": timestamp,
+                "user": user,
+                "price": price,
+                "name": self.items[self.current_index]["name"]
+            })
 
             print(message)
 
-            return message
+            return {
+                "success": True,
+                "message": message,
+                "balance": self.balances[user]
+            }
 
     # -------------------------
 
@@ -162,10 +178,15 @@ Auction Rules:
 
             winner = "No bids"
 
+        # Add complete history entry with winner
+        if self.history and len(self.history) > 0:
+            # Update last history entry with winner
+            self.history[-1]["winner"] = winner
+
         message = (
             "\nITEM SOLD\n"
             f"Winner: {winner}\n"
-            f"Final price: {self.current_price}\n"
+            f"Final price: ${self.current_price}\n"
         )
 
         print(message)
@@ -184,19 +205,15 @@ Auction Rules:
 
             return "\n====AUCTION FINISHED=====\n******Thank You******"
 
-        self.current_price = 200
+        self.current_price = self.items[self.current_index]["base_price"]
         self.highest_bidder = None
         self.remaining_time = self.time_limit
 
         item = self.items[self.current_index]
 
         return (
-
-            f"                          "
-            f"========New Item======    "
-                                    
             f"\nNEXT ITEM: {item['name']}\n"
-            f"Base price: 200\n"
+            f"Base price: ${item['base_price']}\n"
         )
 
     # -------------------------
@@ -205,6 +222,6 @@ Auction Rules:
 
         if not self.history:
 
-            return "No bids yet"
+            return []
 
-        return "\n".join(self.history)
+        return self.history

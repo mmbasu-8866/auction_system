@@ -5,7 +5,7 @@ from auction_client import handle_client
 from models import start_timer
 from logic import AuctionManager
 
-HOST = "172.20.10.2"
+HOST = "0.0.0.0"
 PORT = 5555
 
 clients = []
