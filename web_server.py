@@ -301,4 +301,5 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     print("Starting Advanced Auction Server...")
     print(f"Server accessible at http://0.0.0.0:{port}")
-    socketio.run(app, host='0.0.0.0', port=port, debug=False, allow_unsafe_werkzeug=True)
+    # When on hosting services (Railway/Heroku), allow_unsafe_werkzeug is not used by socketio 5.x
+    socketio.run(app, host='0.0.0.0', port=port, debug=False)
