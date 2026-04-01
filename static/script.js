@@ -21,6 +21,15 @@ let auctionRunning = false;
 socket.on('connect', () => {
     setConnectionStatus(true);
     console.log('Connected to server');
+    
+    // Auto-login on connection if we have a stored username
+    const storedUsername = localStorage.getItem('auction_username');
+    if (storedUsername && !isLoggedIn) {
+        console.log('Auto-logging in with stored username:', storedUsername);
+        currentUsername = storedUsername;
+        usernameInput.value = storedUsername;
+        socket.emit('register', { username: storedUsername });
+    }
 });
 
 socket.on('disconnect', () => {
@@ -40,9 +49,14 @@ socket.on('connection_response', (data) => {
 socket.on('welcome', (data) => {
     isLoggedIn = true;
     loginPanel.classList.remove('active');
+    loginPanel.style.display = 'none';
     auctionPanel.classList.add('active');
+    auctionPanel.style.display = 'block';
     userInfo.textContent = `Logged in as: ${currentUsername}`;
     
+    // Persist login in browser so page reload keeps you logged in
+    localStorage.setItem('auction_username', currentUsername);
+
     addMessage('Welcome! You have joined the auction.', 'info');
     updateBalance(data.balance);
     
@@ -105,6 +119,11 @@ socket.on('history', (data) => {
 
 // Event Listeners
 loginBtn.addEventListener('click', () => {
+    if (isLoggedIn) {
+        showToast('Already logged in', 'warning');
+        return;
+    }
+    
     const username = usernameInput.value.trim();
     if (!username) {
         showToast('Please enter a username', 'warning');
@@ -224,8 +243,13 @@ function updateHistory(history) {
 function resetUI() {
     isLoggedIn = false;
     currentUsername = null;
+    localStorage.removeItem('auction_username');
+
     loginPanel.classList.add('active');
+    loginPanel.style.display = 'block';
     auctionPanel.classList.remove('active');
+    auctionPanel.style.display = 'none';
+
     userInfo.textContent = 'Not logged in';
     messagesContainer.innerHTML = '<p class="system-message">Waiting for auction to start...</p>';
     document.getElementById('history').innerHTML = '<p class="empty-message">No history yet</p>';

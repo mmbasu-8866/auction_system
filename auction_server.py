@@ -1,3 +1,4 @@
+import os
 import socket
 import threading
 
@@ -5,13 +6,22 @@ from auction_client import handle_client
 from models import start_timer
 from logic import AuctionManager
 
-HOST = "0.0.0.0"
-PORT = 5555
+HOST = os.environ.get("HOST", "0.0.0.0")
+PORT = int(os.environ.get("PORT", "5555"))
 
 clients = []
 clients_lock = threading.Lock()
 
 auction = AuctionManager()
+
+
+def get_local_ip():
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.connect(("8.8.8.8", 80))
+            return s.getsockname()[0]
+    except Exception:
+        return "127.0.0.1"
 
 
 def start_server():
@@ -30,7 +40,11 @@ def start_server():
     server.bind((HOST, PORT))
     server.listen(10)
 
+    local_ip = get_local_ip()
     print("Auction Server Started")
+    print("Listening on:")
+    print(f"  - 0.0.0.0:{PORT}  (all interfaces)")
+    print(f"  - {local_ip}:{PORT}  (use this from other Wi-Fi devices)")
     print("Waiting for clients...")
 
     start_timer(
