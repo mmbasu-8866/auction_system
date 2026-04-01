@@ -56,8 +56,8 @@ def start_auction_timer():
             # Broadcast timer to ALL clients (auction is running)
             socketio.emit('auction_state', {
                 'current_item': auction.items[auction.current_index] if auction.current_index < len(auction.items) else None,
-                'current_price': auction.current_price,
-                'highest_bidder': auction.highest_bidder,
+                'current_price': auction.auction.get_current_bid(),
+                'highest_bidder': auction.auction.get_highest_bidder(),
                 'time_remaining': remaining,
                 'status': 'running',
                 'countdown_active': False,
@@ -69,38 +69,43 @@ def start_auction_timer():
             if remaining == 0:
                 print("\n✓ Item sold!")
                 
-                # Close item and get winner
-                auction.close_current_item()
-                winner = auction.highest_bidder or "Nobody"
-                
-                socketio.emit('message_update', {
-                    'message': f'🔨 Item SOLD to {winner}!',
-                    'type': 'system',
-                    'timestamp': datetime.now().strftime('%H:%M:%S')
-                })
-                
-                # Move to next item
-                auction.move_to_next_item()
-                
-                # Send updated history to all clients
-                socketio.emit('history', {'history': auction.history})
-                
-                if auction.auction_running:
-                    time.sleep(1)  # Pause before next item
+                try:
+                    # Close item and get winner with final price
+                    item_result = auction.close_current_item()
+                    winner = item_result.get("winner", "Nobody")
+                    final_price = item_result.get("final_price", 0)
+                    
                     socketio.emit('message_update', {
-                        'message': f'⏭️ Next Item: {auction.items[auction.current_index]["name"]} - Starting at ${auction.items[auction.current_index]["base_price"]}',
+                        'message': f'🔨 Item SOLD to {winner} for ${final_price}!',
                         'type': 'system',
                         'timestamp': datetime.now().strftime('%H:%M:%S')
                     })
                     
-                    # Broadcast new item state
-                    broadcast_auction_state()
-                else:
-                    socketio.emit('message_update', {
-                        'message': '🎊 AUCTION FINISHED! Thank you for participating!',
-                        'type': 'system',
-                        'timestamp': datetime.now().strftime('%H:%M:%S')
-                    })
+                    # Move to next item (with thread-safe locking)
+                    next_item_msg = auction.move_to_next_item()
+                    
+                    # Send updated history to all clients
+                    socketio.emit('history', {'history': auction.history})
+                    
+                    if auction.auction_running:
+                        time.sleep(2)  # Pause before next item
+                        socketio.emit('message_update', {
+                            'message': f'⏭️ Next Item: {auction.items[auction.current_index]["name"]} - Starting at ${auction.items[auction.current_index]["base_price"]}',
+                            'type': 'system',
+                            'timestamp': datetime.now().strftime('%H:%M:%S')
+                        })
+                        
+                        # Broadcast new item state
+                        broadcast_auction_state()
+                    else:
+                        socketio.emit('message_update', {
+                            'message': '🎊 AUCTION FINISHED! Thank you for participating!',
+                            'type': 'system',
+                            'timestamp': datetime.now().strftime('%H:%M:%S')
+                        })
+                except Exception as e:
+                    print(f"Error closing item: {e}")
+                    auction.auction_running = False
         except Exception as e:
             print(f"Error in auction timer loop: {e}")
             break
@@ -258,31 +263,14 @@ def broadcast_update(message, message_type="info"):
 
 def broadcast_auction_state():
     """Broadcast current auction state to all clients"""
-    try:
-        socketio.emit('auction_state', {
-            'current_item': auction.items[auction.current_index] if auction.current_index < len(auction.items) else None,
-            'current_price': auction.current_price,
-            'highest_bidder': auction.highest_bidder,
-            'time_remaining': auction.remaining_time,
-            'status': 'running' if auction.auction_running else 'finished',
-            'countdown_active': False,
-            'countdown_remaining': 0,
-            'active_bidders': len(clients_info)
-        })
-    except Exception as e:
-        print(f"Error broadcasting auction state: {e}")
-
-
-def broadcast_auction_state():
-    """Broadcast current auction state to all clients"""
     current_item = None
     if auction.current_index < len(auction.items):
         current_item = auction.items[auction.current_index]
     auction_status = 'running' if auction.auction_running else 'pending'
     
     time_remaining = auction.remaining_time if auction.auction_running else 0
-    current_price = auction.current_price if auction.auction_running else 0
-    highest_bidder = auction.highest_bidder if auction.auction_running else 'None'
+    current_price = auction.auction.get_current_bid() if auction.auction_running else 0
+    highest_bidder = auction.auction.get_highest_bidder() if auction.auction_running else 'None'
 
     socketio.emit('auction_state', {
         'current_item': current_item,

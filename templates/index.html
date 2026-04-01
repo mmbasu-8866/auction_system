@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Auction System</title>
+    <title>Professional Auction System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </head>
@@ -11,10 +11,13 @@
     <div class="container">
         <!-- Header -->
         <header class="header">
-            <h1>🎯 Advanced Auction System</h1>
+            <div>
+                <h1>⚡ Auction Hub</h1>
+                <p style="color: #64748b; margin-top: 5px; font-size: 0.95em;">Premium Real-Time Bidding Platform</p>
+            </div>
             <div class="status-bar">
-                <span id="connection-status" class="status disconnected">Disconnected</span>
-                <span id="user-info" class="user-info">Not logged in</span>
+                <span id="connection-status" class="status disconnected">● Disconnected</span>
+                <span id="user-info" class="user-info">👤 Not logged in</span>
             </div>
         </header>
 
@@ -22,18 +25,19 @@
         <div class="content">
             <!-- Login Panel -->
             <div id="login-panel" class="panel active">
-                <h2>Join the Auction</h2>
+                <h2>🎯 Welcome to the Auction</h2>
+                <p>Join thousands of bidders in the most thrilling online auction experience</p>
                 <div class="form-group">
                     <input 
                         type="text" 
                         id="username-input" 
-                        placeholder="Enter your username" 
+                        placeholder="Enter your unique username" 
                         maxlength="20"
                         autocomplete="off"
                     >
-                    <button id="login-btn" class="btn btn-primary">Join Auction</button>
+                    <button id="login-btn" class="btn btn-primary">🚀 Join Now</button>
                 </div>
-                <p class="info-text">Enter a unique username to participate in the auction.</p>
+                <p class="info-text">✓ Secure • ✓ Real-time Updates • ✓ Fair Bidding</p>
             </div>
 
             <!-- Auction Panel -->
@@ -41,58 +45,71 @@
                 <div class="auction-grid">
                     <!-- Current Item -->
                     <div class="section current-item">
-                        <h3>Current Item</h3>
+                        <h3>📦 Current Item</h3>
                         <div id="item-display" class="item-box">
                             <p class="item-name">Waiting for auction to start...</p>
                             <p class="item-price">$0</p>
+                            <p style="color: #64748b; font-size: 0.9em; margin-top: 10px;">Base Price</p>
                         </div>
                     </div>
 
                     <!-- Bidding Area -->
                     <div class="section bidding-area">
-                        <h3>Place Your Bid</h3>
+                        <h3>💰 Place Your Bid</h3>
                         <div class="bid-form">
                             <input 
                                 type="number" 
                                 id="bid-input" 
-                                placeholder="Bid amount" 
+                                placeholder="Enter bid amount" 
                                 min="1" 
                                 step="1"
                             >
-                            <button id="bid-btn" class="btn btn-success">Place Bid</button>
+                            <button id="bid-btn" class="btn btn-success">🎯 Bid</button>
                         </div>
                         <div class="auction-info">
-                            <p>Current Price: <span id="current-price">$0</span></p>
-                            <p>Highest Bidder: <span id="highest-bidder">None</span></p>
-                            <p>Time Remaining: <span id="time-remaining">20s</span></p>
-                            <p>Active Bidders: <span id="active-bidders">0</span></p>
+                            <p>
+                                <span style="color: #64748b;">Current Price</span>
+                                <span id="current-price">$0</span>
+                            </p>
+                            <p>
+                                <span style="color: #64748b;">Highest Bidder</span>
+                                <span id="highest-bidder">None</span>
+                            </p>
+                            <p>
+                                <span style="color: #64748b;">⏱️ Time Left</span>
+                                <span id="time-remaining" style="font-size: 1.2em;">20s</span>
+                            </p>
+                            <p>
+                                <span style="color: #64748b;">Active Bidders</span>
+                                <span id="active-bidders">0</span>
+                            </p>
                         </div>
                     </div>
 
                     <!-- Balance & Account -->
                     <div class="section account">
-                        <h3>Your Account</h3>
+                        <h3>💳 Your Account</h3>
                         <div class="balance-box">
-                            <p>Current Balance:</p>
+                            <p>Available Balance</p>
                             <p class="balance-amount" id="balance">$1000</p>
                         </div>
-                        <button id="logout-btn" class="btn btn-secondary">Leave Auction</button>
+                        <button id="logout-btn" class="btn btn-secondary">🚪 Leave Auction</button>
                     </div>
                 </div>
 
                 <!-- Live Feed -->
                 <div class="section live-feed">
-                    <h3>Live Feed</h3>
+                    <h3>📢 Live Activity Feed</h3>
                     <div id="messages" class="messages-container">
-                        <p class="system-message">Waiting for auction to start...</p>
+                        <p class="system-message">🔄 Waiting for auction to start...</p>
                     </div>
                 </div>
 
                 <!-- Auction History -->
                 <div class="section history">
-                    <h3>Auction History</h3>
+                    <h3>📊 Auction Record</h3>
                     <div id="history" class="history-container">
-                        <p class="empty-message">No history yet</p>
+                        <p class="empty-message">No activity yet</p>
                     </div>
                 </div>
             </div>

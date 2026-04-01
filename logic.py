@@ -2,6 +2,37 @@ import threading
 import time
 
 
+class Auction:
+    """Manages bidding for a single auction item"""
+    
+    def __init__(self, base_price):
+        self.current_bid = base_price
+        self.highest_bidder = None
+    
+    def place_bid(self, user, amount):
+        """Place a bid. Returns tuple (success, message)"""
+        if amount <= self.current_bid:
+            return False, f"Bid must be higher than ${self.current_bid}"
+        
+        # Refund previous bidder if exists
+        previous_bidder = self.highest_bidder
+        
+        self.current_bid = amount
+        self.highest_bidder = user
+        
+        return True, previous_bidder
+    
+    def end_auction(self):
+        """End auction and return winner and final price"""
+        return self.highest_bidder, self.current_bid
+    
+    def get_current_bid(self):
+        return self.current_bid
+    
+    def get_highest_bidder(self):
+        return self.highest_bidder
+
+
 class AuctionManager:
 
     def __init__(self):
@@ -17,8 +48,7 @@ class AuctionManager:
         ]
 
         self.current_index = 0
-        self.current_price = 200
-        self.highest_bidder = None
+        self.auction = Auction(self.items[0]["base_price"])
 
         self.time_limit = 20
         self.remaining_time = 20
@@ -64,8 +94,8 @@ Auction Rules:
         return (
             f"\nCURRENT ITEM: {item['name']}\n"
             f"Base price: ${item['base_price']}\n"
-            f"Current price: ${self.current_price}\n"
-            f"Highest bidder: {self.highest_bidder}"
+            f"Current price: ${self.auction.get_current_bid()}\n"
+            f"Highest bidder: {self.auction.get_highest_bidder()}"
         )
 
     # -------------------------
@@ -88,13 +118,6 @@ Auction Rules:
                     "message": "Bid must be a positive integer"
                 }
 
-            if price <= self.current_price:
-
-                return {
-                    "success": False,
-                    "message": f"Bid must be higher than ${self.current_price}"
-                }
-
             if user not in self.balances:
 
                 return {
@@ -109,17 +132,21 @@ Auction Rules:
                     "message": f"Insufficient balance. You have ${self.balances[user]}"
                 }
 
-            # refund previous bidder
-            if self.highest_bidder and self.highest_bidder != user:
+            # Double-check auction object exists and is healthy
+            if not self.auction:
+                return {
+                    "success": False,
+                    "message": "Auction state error - try again"
+                }
 
-                prev = self.highest_bidder
-                self.balances[prev] += self.current_price
-
-            # deduct new bidder balance
-            self.balances[user] -= price
-
-            self.current_price = price
-            self.highest_bidder = user
+            # Use Auction class to validate bid amount
+            success, result = self.auction.place_bid(user, price)
+            
+            if not success:
+                return {
+                    "success": False,
+                    "message": result
+                }
 
             # reset timer
             self.remaining_time = self.time_limit
@@ -170,51 +197,57 @@ Auction Rules:
 
     def close_current_item(self):
 
-        if self.highest_bidder:
+        winner, final_price = self.auction.end_auction()
 
-            winner = self.highest_bidder
-
-        else:
+        if not winner:
 
             winner = "No bids"
+
+        else:
+            # Deduct balance only from winner when auction closes
+            with self.lock:
+                if winner in self.balances:
+                    self.balances[winner] -= final_price
 
         # Add complete history entry with winner
         if self.history and len(self.history) > 0:
             # Update last history entry with winner
             self.history[-1]["winner"] = winner
+            self.history[-1]["final_price"] = final_price
 
         message = (
             "\nITEM SOLD\n"
             f"Winner: {winner}\n"
-            f"Final price: ${self.current_price}\n"
+            f"Final price: ${final_price}\n"
         )
 
         print(message)
 
-        return message
+        return {"winner": winner, "final_price": final_price, "message": message}
 
     # -------------------------
 
     def move_to_next_item(self):
 
-        self.current_index += 1
+        with self.lock:
+            self.current_index += 1
 
-        if self.current_index >= len(self.items):
+            if self.current_index >= len(self.items):
 
-            self.auction_running = False
+                self.auction_running = False
 
-            return "\n====AUCTION FINISHED=====\n******Thank You******"
+                return "\n====AUCTION FINISHED=====\n******Thank You******"
 
-        self.current_price = self.items[self.current_index]["base_price"]
-        self.highest_bidder = None
-        self.remaining_time = self.time_limit
+            # Create new Auction instance for the next item
+            self.auction = Auction(self.items[self.current_index]["base_price"])
+            self.remaining_time = self.time_limit
 
-        item = self.items[self.current_index]
+            item = self.items[self.current_index]
 
-        return (
-            f"\nNEXT ITEM: {item['name']}\n"
-            f"Base price: ${item['base_price']}\n"
-        )
+            return (
+                f"\nNEXT ITEM: {item['name']}\n"
+                f"Base price: ${item['base_price']}\n"
+            )
 
     # -------------------------
 
